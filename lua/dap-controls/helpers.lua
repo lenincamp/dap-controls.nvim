@@ -447,7 +447,13 @@ function M.run_to_method_breakpoint()
     items[#items + 1] = { line = line, label = string.format("line %d%s", line, mark) }
   end
 
-  require("picker").select_items(items, {
+  local ok, picker = pcall(require, "picker")
+  local select_items = (ok and type(picker.select_items) == "function") and picker.select_items
+    or function(list, opts, on_choice)
+      vim.ui.select(list, { prompt = opts.prompt, format_item = opts.format_item }, on_choice)
+    end
+
+  select_items(items, {
     prompt           = "Run to method breakpoint",
     search_threshold = 0,
     format_item      = function(item) return item.label end,
