@@ -1,3 +1,6 @@
 *.DS_Store
 .direnv
 .cache
+
+# Neovim
+*.log
